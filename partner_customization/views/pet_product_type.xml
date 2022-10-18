@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <record id="pet_product_type_list_view" model="ir.ui.view">
+            <field name="name">pet.product.type.view</field>
+            <field name="model">pet.product.type</field>
+            <field name="arch" type="xml">
+                <tree string="Pet Product Type">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="pet_product_type_list_tree" model="ir.ui.view">
+            <field name="name">pet.product.type.view</field>
+            <field name="model">pet.product.type</field>
+             <field name="arch" type="xml">
+                <tree string="">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="pet_product_type_action" model="ir.actions.act_window">
+            <field name="name">Pet Product Type</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">pet.product.type</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    <!-- Add Text Here -->
+                </p>
+                <p>
+                    <!-- More details about what a user can do with this object will be OK -->
+                </p>
+            </field>
+        </record>
+
+        <!-- This Menu Item must have a parent and an action -->
+        <menuitem id="pet_product_type_action_mnu" name="Pet Product Type" parent="stock.menu_stock_config_settings"
+                  action="pet_product_type_action" sequence="4"/>
+
+    </data>
+</odoo>

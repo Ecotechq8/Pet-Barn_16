@@ -1,0 +1,16 @@
+<odoo>
+
+    <record id="view_partner_inherited_form_view" model="ir.ui.view">
+        <field name="name">res.partner.form.inherited.view</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="pets_names_id" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                <field name="birthday_date"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

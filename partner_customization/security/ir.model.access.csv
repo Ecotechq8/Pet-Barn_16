@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pets_name,access_pets_name,model_pets_name,,1,1,1,1
+access_pets_product_type,access_pets_product_type,model_pet_product_type,,1,1,1,1
+
+
+
+
+
+
+
+
