@@ -5,7 +5,7 @@ from odoo.exceptions import ValidationError
 class PriceList(models.Model):
     _inherit = 'product.pricelist'
 
-    is_wholesale = fields.Boolean(string='Wholesale')
+    is_wholesale = fields.Boolean(string='not Wholesale')
 
     @api.constrains('is_wholesale')
     def check_is_wholesale(self):

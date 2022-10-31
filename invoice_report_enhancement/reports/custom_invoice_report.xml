@@ -178,24 +178,24 @@
                                             <span t-field="line.product_id.name" t-options="{'widget': 'text'}"/>
                                         </td>
                                         <td class="text-center">
-                                            <!--                                            <span t-field=""/>-->
+                                            <span t-field="line.expiration_date"/>
                                         </td>
                                         <td class="text-center">
                                             <span t-field="line.quantity"/>
                                             <span t-field="line.product_uom_id" groups="uom.group_uom"/>
                                         </td>
                                         <td class="text-center">
-                                            <t t-if="line.move_id.line_ids.sale_line_ids.order_id.pricelist_id">
-                                                <t t-foreach="line.move_id.line_ids.sale_line_ids.order_id.pricelist_id.item_ids"
-                                                   t-as="item">
-                                                    <t t-if="item.name == line.product_id.name">
+                                            <span class="text-nowrap" t-field="line.price_unit"
+                                                  t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                        <td class="text-center">
+                                            <t t-if="o.default_price_list">
+                                                <t t-foreach="o.default_price_list.item_ids" t-as="item">
+                                                    <t t-if="item.product_tmpl_id.name == line.product_id.name">
                                                         <span class="text-nowrap" t-field="item.price"/>
                                                     </t>
                                                 </t>
                                             </t>
-                                        </td>
-                                        <td class="text-center">
-                                            <span class="text-nowrap" t-field="line.price_unit"/>
                                         </td>
                                         <td class="text-end o_price_total">
                                             <span class="text-nowrap" t-field="line.price_subtotal"
