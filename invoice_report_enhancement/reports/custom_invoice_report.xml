@@ -304,13 +304,15 @@
         </template>
 
         <!-- QWeb Reports -->
-        <record id="account_invoices_pet_barn" model="ir.actions.report">
-            <field name="name">Pet Barn Invoice</field>
+        <record id="account.account_invoices" model="ir.actions.report">
+            <field name="name">Pet Barn Invoices</field>
             <field name="model">account.move</field>
             <field name="report_type">qweb-pdf</field>
             <field name="report_name">invoice_report_enhancement.report_invoice_pet_barn</field>
             <field name="report_file">invoice_report_enhancement.report_invoice_pet_barn</field>
             <field name="print_report_name">(object._get_report_base_filename())</field>
+            <field name="attachment">(object.state == 'posted') and ((object.name or 'INV').replace('/','_')+'.pdf')
+            </field>
             <field name="binding_model_id" ref="account.model_account_move"/>
             <field name="binding_type">report</field>
             <field name="groups_id"
