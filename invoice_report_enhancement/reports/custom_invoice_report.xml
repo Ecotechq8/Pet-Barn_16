@@ -94,7 +94,7 @@
             <t t-call="web.basic_layout">
                 <t t-set="o" t-value="o.with_context(lang=lang)"/>
                 <div class="page" dir="ltr">
-                    <h2 style="margin-top:45px;">
+                    <h2 style="margin-top:50px;">
                         <center>
                             <strong>
                                 <span>فــــــــاتورة بالحساب</span>
