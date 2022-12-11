@@ -20,7 +20,6 @@ class AccountMoveLine(models.Model):
         for item in self:
             item.expiration_date = False
             if item.sale_line_ids.order_id.picking_ids:
-                print('ddddddddddddddddddd')
                 for pic in item.sale_line_ids.order_id.picking_ids:
                     print(pic)
                     for line in pic.move_line_ids_without_package:

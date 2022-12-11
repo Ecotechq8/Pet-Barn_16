@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_sales_pet_barn_document">
+            <t t-call="web.basic_layout">
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <div class="page" dir="ltr">
+                    <h2 style="margin-top:50px;">
+                        <center>
+                            <strong>
+                                <span>أمــر بـيــع</span>
+                                <br/>
+                                <span>Sales Quotation</span>
+                            </strong>
+                        </center>
+                    </h2>
+
+                    <div id="account_info" class="row mt-4 mb-4" dir="rtl">
+                        <div class="col-auto col-3 mw-100 mb-2">
+                            <t>
+                                <strong>الـتـاريــخ:
+                                    &#160;&#160;&#160;&#160;
+                                    <span t-field="o.date_order"/>
+                                </strong>
+                            </t>
+                            <br/>
+                            <t>
+                                <strong>الســـادة:</strong>
+                                &#160;&#160;&#160;&#160;
+                                <span t-field="o.partner_id.name"/>
+                            </t>
+                            <br/>
+                            <t>
+                                <strong>المـلاحـظــات:</strong>
+                                &#160;&#160;&#160;&#160;
+                                <span t-field="o.note"/>
+                            </t>
+                            <br/>
+                            <t>
+                                <strong>رقـم العـمـيـل:</strong>
+                                &#160;&#160;&#160;&#160;
+                                <span t-field="o.partner_id.ref"/>
+                            </t>
+                        </div>
+                        <div class="col-auto col-3 mw-100 mb-2">
+                            <strong>رقـم أمـر البـيـع</strong>
+                            <p class="m-0" t-field="o.name"/>
+                        </div>
+                    </div>
+
+                    <t t-set="lines_to_report" t-value="o._get_order_lines_to_report()"/>
+                    <t t-set="display_discount" t-value="any(l.discount for l in lines_to_report)"/>
+
+                    <table class="table table-sm o_main_table" name="account_invoice_line" style="margin-top:30px;">
+                        <thead>
+                            <tr>
+                                <th name="th_code" class="text-center">
+                                    <span>رقـم الصـنـف
+                                        <br/>
+                                        Product Number
+                                    </span>
+                                </th>
+                                <th name="th_name" class="text-center">
+                                    <span>اســم الصـنـف
+                                        <br/>
+                                        Product Name
+                                    </span>
+                                </th>
+                                <th name="th_expiry_date" class="text-center">
+                                    <span>صـلاحـيــة المـنـتـج
+                                        <br/>
+                                        Expiry Date
+                                    </span>
+                                </th>
+                                <th name="th_quantity" class="text-center">
+                                    <span>الكـمـيـة
+                                        <br/>
+                                        Qty
+                                    </span>
+                                </th>
+                                <th name="th_price_unit_wp" class="text-center">
+                                    <span>سـعـر الجـمـلـة
+                                        <br/>
+                                        WSP
+                                    </span>
+                                </th>
+                                <th name="th_price_unit_rp" class="text-center">
+                                    <span>سـعـر التـجـزئـة
+                                        <br/>
+                                        RP
+                                    </span>
+                                </th>
+                                <th name="th_subtotal" class="text-center">
+                                    <span>الإجمالى
+                                        <br/>
+                                        Total
+                                    </span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="sales_tbody text-center">
+                            <t t-set="current_subtotal" t-value="0"/>
+                            <t t-foreach="lines_to_report" t-as="line">
+                                <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"
+                                   groups="account.group_show_line_subtotals_tax_excluded"/>
+                                <t t-set="current_subtotal" t-value="current_subtotal + line.price_total"
+                                   groups="account.group_show_line_subtotals_tax_included"/>
+
+                                <tr t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
+                                    <t t-if="not line.display_type">
+                                        <td class="text-center">
+                                            <span t-field="line.product_id.default_code"
+                                                  t-options="{'widget': 'text'}"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-field="line.product_id.name" t-options="{'widget': 'text'}"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <!--                                            <span t-field="line.expiration_date"/>-->
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-field="line.product_uom_qty"/>
+                                            <span t-field="line.product_uom" groups="uom.group_uom"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="text-nowrap" t-field="line.price_unit"
+                                                  t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                        <td class="text-center">
+                                            <t t-if="o.default_price_list">
+                                                <t t-foreach="o.default_price_list.item_ids" t-as="item">
+                                                    <t t-if="item.product_tmpl_id.name == line.product_id.name">
+                                                        <span class="text-nowrap" t-field="item.price"/>
+                                                    </t>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="text-end o_price_total">
+                                            <span class="text-nowrap" t-field="line.price_subtotal"
+                                                  groups="account.group_show_line_subtotals_tax_excluded"/>
+                                        </td>
+                                    </t>
+                                    <t t-elif="line.display_type == 'line_section'">
+                                        <td name="td_section_line" colspan="99">
+                                            <span t-field="line.name"/>
+                                        </td>
+                                        <t t-set="current_section" t-value="line"/>
+                                        <t t-set="current_subtotal" t-value="0"/>
+                                    </t>
+                                    <t t-elif="line.display_type == 'line_note'">
+                                        <td name="td_note_line" colspan="99">
+                                            <span t-field="line.name"/>
+                                        </td>
+                                    </t>
+                                </tr>
+
+
+                                <t t-if="current_section and (line_last or lines[line_index+1].display_type == 'line_section')">
+                                    <tr class="is-subtotal text-end">
+                                        <td colspan="99">
+                                            <strong class="mr16">Total</strong>
+                                            <span
+                                                    t-esc="current_subtotal"
+                                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <div class="clearfix mb-4">
+                        <div id="total" class="row">
+                            <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ms-auto">
+                                <table class="table table-sm" style="page-break-inside: avoid;">
+
+                                    <!--Tax totals-->
+                                    <t t-set="tax_totals" t-value="o.tax_totals"/>
+                                    <t t-foreach="tax_totals['subtotals']" t-as="subtotal">
+                                        <tr class="border-black o_subtotal">
+                                            <td colspan="6">
+                                                <strong t-esc="subtotal['name']"/>
+                                            </td>
+                                            <td class="text-end">
+                                                <span t-att-class="oe_subtotal_footer_separator"
+                                                      t-esc="subtotal['formatted_amount']"/>
+                                            </td>
+                                        </tr>
+                                        <t t-set="subtotal_to_show" t-value="subtotal['name']"/>
+                                        <t t-call="account.tax_groups_totals"/>
+                                    </t>
+
+                                    <!--Total amount with all taxes-->
+                                    <tr class="border-black o_total">
+                                        <td>
+                                            <strong>المـجـمـوع
+                                                <br/>
+                                                Total
+                                            </strong>
+                                        </td>
+                                        <td class="text-end">
+                                            <span t-esc="tax_totals['formatted_amount_total']"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="font-size: 14px;text-align:center" dir="rtl">
+                        <div class="col-3">
+                            <strong>اسـم المـسـتـلـم<br/>Recipient Name
+                            </strong>
+                            <br/>
+                            <br/>
+                            <span>--------------------------------------</span>
+                            <br/>
+                            <br/>
+                            <strong>التـوقـيـع</strong>
+                            <br/>
+                            <br/>
+                            <span>--------------------------------------</span>
+                        </div>
+                        <div class="col-4"/>
+                        <div class="col-3">
+                            <strong>تـوقـيـع البـائـع<br/>Signature of the seller
+                            </strong>
+                            <br/>
+                            <br/>
+                            <span>--------------------------------------</span>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="report_sales_pet_barn">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <span t-field="o.partner_id.lang"/>
+                    <t t-set="lang" t-value="o.partner_id.lang"/>
+                    <t t-call="sales_report_enhancement.report_sales_pet_barn_document" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+
+        <record id="paperformat_report_sales" model="report.paperformat">
+            <field name="name">pet barn sales paperformat</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">280</field>
+            <field name="page_width">220</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">80</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">1</field>
+            <field name="margin_right">1</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">50</field>
+            <field name="dpi">90</field>
+            <field name="report_ids"
+                   eval="[(6,0,[ref('sales_report_enhancement.report_sales_pet_barn')])]"/>
+        </record>
+
+        <!-- QWeb Reports -->
+        <record id="sale.action_report_saleorder" model="ir.actions.report">
+            <field name="name">Pet Barn Quotation / Order</field>
+            <field name="model">sale.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">sales_report_enhancement.report_sales_pet_barn</field>
+            <field name="report_file">sales_report_enhancement.report_sales_pet_barn</field>
+            <field name="print_report_name">(object.state in ('draft', 'sent') and 'Quotation - %s' % (object.name)) or 'Order - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
+            <field name="binding_type">report</field>
+        </record>
+
+    </data>
+</odoo>
