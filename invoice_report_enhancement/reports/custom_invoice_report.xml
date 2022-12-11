@@ -99,7 +99,7 @@
                             <strong>
                                 <span>فــــــــاتورة بالحساب</span>
                                 <br/>
-                                <span>Invoice Credit On Account</span>
+                                <span>Credit Invoice On Account</span>
                             </strong>
                         </center>
                     </h2>
@@ -123,6 +123,12 @@
                                 <strong>المـلاحـظــات:</strong>
                                 &#160;&#160;&#160;&#160;
                                 <span t-field="o.narration"/>
+                            </t>
+                            <br/>
+                            <t>
+                                <strong>رقـم العـمـيـل:</strong>
+                                &#160;&#160;&#160;&#160;
+                                <span t-field="o.partner_id.ref"/>
                             </t>
                         </div>
                         <div class="col-auto col-3 mw-100 mb-2">
