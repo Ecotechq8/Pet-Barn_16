@@ -21,8 +21,6 @@ class AccountMoveLine(models.Model):
             item.expiration_date = False
             if item.sale_line_ids.order_id.picking_ids:
                 for pic in item.sale_line_ids.order_id.picking_ids:
-                    print(pic)
                     for line in pic.move_line_ids_without_package:
                         if line.product_id == item.product_id and line.lot_id:
-                            print(line.lot_id.expiration_date)
                             item.expiration_date = str(line.lot_id.expiration_date.date())

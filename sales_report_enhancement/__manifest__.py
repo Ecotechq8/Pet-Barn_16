@@ -9,6 +9,7 @@
                 'sale_management'],
     'data': [
         'reports/custom_sales_report.xml',
+        'views/sale_order_inh_view.xml',
     ],
     'installable': True,
     'auto_install': False,

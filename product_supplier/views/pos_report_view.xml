@@ -1,0 +1,20 @@
+<odoo>
+    <data>
+        <record id="report_pos_order_inherited_search_view" model="ir.ui.view">
+            <field name="name">report.pos.order.inherited.search.view</field>
+            <field name="model">report.pos.order</field>
+            <field name="inherit_id" ref="point_of_sale.view_report_pos_order_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_categ_id']" position="after">
+                    <field name="product_supplier"/>
+                </xpath>
+                <xpath expr="//filter[@name='not_invoiced']" position="after">
+                    <filter name="product_supplier" string="Product Supplier" domain="[('product_supplier', '!=', False)]"/>
+                </xpath>
+                <xpath expr="//filter[@name='product_category']" position="after">
+                    <filter string="Product Supplier" name="product_supplier" context="{'group_by': 'product_supplier'}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

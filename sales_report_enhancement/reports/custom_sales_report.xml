@@ -8,9 +8,16 @@
                     <h2 style="margin-top:50px;">
                         <center>
                             <strong>
-                                <span>أمــر بـيــع</span>
-                                <br/>
-                                <span>Sales Quotation</span>
+                                <t t-if="o.state == 'sale'">
+                                    <span>أمــر بـيــع</span>
+                                    <br/>
+                                    <span>Sale Order</span>
+                                </t>
+                                <t t-else="">
+                                    <span>عـرض سـعـر</span>
+                                    <br/>
+                                    <span>Sale Quotation</span>
+                                </t>
                             </strong>
                         </center>
                     </h2>
@@ -100,6 +107,7 @@
                         </thead>
                         <tbody class="sales_tbody text-center">
                             <t t-set="current_subtotal" t-value="0"/>
+                            <t t-set="expiration_date" t-value="[]"/>
                             <t t-foreach="lines_to_report" t-as="line">
                                 <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"
                                    groups="account.group_show_line_subtotals_tax_excluded"/>
@@ -116,6 +124,15 @@
                                             <span t-field="line.product_id.name" t-options="{'widget': 'text'}"/>
                                         </td>
                                         <td class="text-center">
+                                            <t t-if="line.lot_serial_number_ids">
+                                                <t t-foreach="line.lot_serial_number_ids" t-as="serial">
+                                                    <t t-if="serial.expiration_date not in expiration_date">
+                                                        <span t-esc="serial.expiration_date"/>
+                                                        <br/>
+                                                        <t t-set="expiration_date" t-value="expiration_date + [serial.expiration_date]"/>
+                                                    </t>
+                                                </t>
+                                            </t>
                                             <!--                                            <span t-field="line.expiration_date"/>-->
                                         </td>
                                         <td class="text-center">
