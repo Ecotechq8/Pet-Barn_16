@@ -21,7 +21,8 @@ class SaleOrderLine(models.Model):
     def onchange_product_id(self):
         serials = []
         quants = self.env['stock.quant'].search(
-            [('location_id', '=', self.related_location_id.id), ('product_id', '=', self.product_id.id)])
+            [('location_id', '=', self.related_location_id.id), ('product_id', '=', self.product_id.id),
+             ('location_id.usage', '=', 'internal')])
         for line in quants:
             serials.append(line.lot_id.id)
         return {'domain': {'lot_serial_number_ids': [('product_id', '=', self.product_id.id),
