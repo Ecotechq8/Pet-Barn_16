@@ -25,4 +25,4 @@ class SaleOrderLine(models.Model):
         for line in quants:
             serials.append(line.lot_id.id)
         return {'domain': {'lot_serial_number_ids': [('product_id', '=', self.product_id.id),
-                                                     ('id', 'in', serials)]}}
+                                                     ('id', 'in', serials), ('product_qty', '!=', 0.0)]}}

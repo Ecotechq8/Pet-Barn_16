@@ -22,6 +22,18 @@
         </field>
     </record>
 
+    <record id="product_product_search_supplier_add" model="ir.ui.view">
+        <field name="name">product.product.search.supplier</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="stock.product_search_form_view_stock_report"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='categ_id']" position="after">
+                <filter string="Supplier" name="product_supplier" domain="[]"
+                        context="{'group_by': 'product_supplier'}"/>
+            </xpath>
+        </field>
+    </record>
+
     <record id="stock_quant_form_supplier_add" model="ir.ui.view">
         <field name="name">stock.quant.form.supplier</field>
         <field name="model">stock.quant</field>
@@ -29,6 +41,18 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='product_uom_id']" position="after">
                 <field name="product_supplier" string="Product Supplier"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="stock_quant_search_supplier_add" model="ir.ui.view">
+        <field name="name">stock.quant.search.supplier</field>
+        <field name="model">stock.quant</field>
+        <field name="inherit_id" ref="stock.quant_search_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='company']" position="after">
+                <filter string="Supplier" name="product_supplier" domain="[]"
+                        context="{'group_by': 'product_supplier'}"/>
             </xpath>
         </field>
     </record>
@@ -44,6 +68,18 @@
         </field>
     </record>
 
+    <record id="stock_move_search_supplier_add" model="ir.ui.view">
+        <field name="name">stock.move.search.supplier</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="stock.view_move_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='groupby_date']" position="after">
+                <filter string="Supplier" name="product_supplier" domain="[]"
+                        context="{'group_by': 'product_supplier'}"/>
+            </xpath>
+        </field>
+    </record>
+
     <record id="stock_valuation_layer_tree_supplier_add" model="ir.ui.view">
         <field name="name">stock.valuation.layer.tree.supplier</field>
         <field name="model">stock.valuation.layer</field>
@@ -51,6 +87,18 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='value']" position="after">
                 <field name="product_supplier" string="Product Supplier"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="stock_valuation_layer_search_supplier_add" model="ir.ui.view">
+        <field name="name">stock.valuation.layer.search.supplier</field>
+        <field name="model">stock.valuation.layer</field>
+        <field name="inherit_id" ref="stock_account.view_inventory_valuation_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='group_by_product_id']" position="after">
+                <filter string="Supplier" name="product_supplier" domain="[]"
+                        context="{'group_by': 'product_supplier'}"/>
             </xpath>
         </field>
     </record>
