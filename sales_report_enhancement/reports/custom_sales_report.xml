@@ -127,13 +127,16 @@
                                             <t t-if="line.lot_serial_number_ids">
                                                 <t t-foreach="line.lot_serial_number_ids" t-as="serial">
                                                     <t t-if="serial.expiration_date not in expiration_date">
-                                                        <span t-esc="serial.expiration_date"/>
+                                                        <!--                                                        <span t-esc="serial.expiration_date"/>-->
+                                                        <span t-esc="datetime.datetime.strptime(str(serial.expiration_date), '%Y-%m-%d %H:%M:%S').strftime('%m')"/>
+                                                        /
+                                                        <span t-esc="datetime.datetime.strptime(str(serial.expiration_date), '%Y-%m-%d %H:%M:%S').strftime('%Y')"/>
                                                         <br/>
-                                                        <t t-set="expiration_date" t-value="expiration_date + [serial.expiration_date]"/>
+                                                        <t t-set="expiration_date"
+                                                           t-value="expiration_date + [serial.expiration_date]"/>
                                                     </t>
                                                 </t>
                                             </t>
-                                            <!--                                            <span t-field="line.expiration_date"/>-->
                                         </td>
                                         <td class="text-center">
                                             <span t-field="line.product_uom_qty"/>
