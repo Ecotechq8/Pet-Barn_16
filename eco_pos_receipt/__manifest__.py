@@ -6,10 +6,15 @@
     'author': "ECo-Tech , Elsayed Iraky",
     'category': 'Point Of Sale',
     'depends': ['point_of_sale'],
+
     'assets': {
-        'web.assets_qweb': [
-            'eco_pos_receipt/static/src/xml/pos.xml',
+        'point_of_sale.assets': [
+            'eco_pos_receipt/static/src/js/**/*',
+        ],
+        'point_of_sale.assets': [
+            'eco_pos_receipt/static/src/xml/**/*',
         ],
     },
+
 
 }
