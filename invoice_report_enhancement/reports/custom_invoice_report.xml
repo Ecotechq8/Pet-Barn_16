@@ -1,94 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-
-        <!--        <template id="custom_external_layout_standard">-->
-        <!--            <div t-attf-class="header">-->
-        <!--&lt;!&ndash;                <div class="row" style="font-size: 26px;">&ndash;&gt;-->
-        <!--&lt;!&ndash;                    <div class="col-4" align="left" style="margin-top:100px;margin-left:30px;">&ndash;&gt;-->
-        <!--&lt;!&ndash;                        <h1>&ndash;&gt;-->
-        <!--&lt;!&ndash;                            Pet Barn&ndash;&gt;-->
-        <!--&lt;!&ndash;                        </h1>&ndash;&gt;-->
-        <!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-        <!--&lt;!&ndash;                    <div class="col-3" align="center">&ndash;&gt;-->
-        <!--&lt;!&ndash;                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 250px;"&ndash;&gt;-->
-        <!--&lt;!&ndash;                             alt="Logo"/>&ndash;&gt;-->
-        <!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-        <!--&lt;!&ndash;                    <div class="col-4" align="right" style="margin-top:100px;">&ndash;&gt;-->
-        <!--&lt;!&ndash;                        <h1>&ndash;&gt;-->
-        <!--&lt;!&ndash;                            بــــــت بـــــارن&ndash;&gt;-->
-        <!--&lt;!&ndash;                        </h1>&ndash;&gt;-->
-        <!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-        <!--&lt;!&ndash;                </div>&ndash;&gt;-->
-        <!--            </div>-->
-
-        <!--            <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout {{  'o_report_layout_background' if company.layout_background in ['Geometric', 'Custom']  else  '' }}"-->
-        <!--                 t-attf-style="background-image: url({{ 'data:image/png;base64,%s' % company.layout_background_image.decode('utf-8') if company.layout_background_image and company.layout_background == 'Custom' else '/base/static/img/bg_background_template.jpg' if company.layout_background == 'Geometric' else ''}});"-->
-        <!--                 t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id"-->
-        <!--                 t-att-data-oe-lang="o and o.env.context.get('lang')">-->
-        <!--                <div class="pt-5">-->
-        <!--                    &lt;!&ndash; This div ensures that the address is not cropped by the header. &ndash;&gt;-->
-        <!--                    <t t-call="web.address_layout"/>-->
-        <!--                </div>-->
-        <!--                <t t-out="0"/>-->
-        <!--            </div>-->
-
-        <!--            <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">-->
-        <!--&lt;!&ndash;                <div class="text-center" style="border-top: 1px solid black;">&ndash;&gt;-->
-        <!--&lt;!&ndash;                    <ul class="list-inline mb4">&ndash;&gt;-->
-        <!--&lt;!&ndash;                        <div t-field="company.report_footer"/>&ndash;&gt;-->
-        <!--&lt;!&ndash;                    </ul>&ndash;&gt;-->
-
-        <!--&lt;!&ndash;                    <div t-if="report_type == 'pdf'" class="text-muted">&ndash;&gt;-->
-        <!--&lt;!&ndash;                        Page:&ndash;&gt;-->
-        <!--&lt;!&ndash;                        <span class="page"/>&ndash;&gt;-->
-        <!--&lt;!&ndash;                        /&ndash;&gt;-->
-        <!--&lt;!&ndash;                        <span class="topage"/>&ndash;&gt;-->
-        <!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-        <!--&lt;!&ndash;                </div>&ndash;&gt;-->
-        <!--            </div>-->
-        <!--        </template>-->
-
-        <!--        <template id="custom_external_layout">-->
-        <!--            <t t-if="not o" t-set="o" t-value="doc"/>-->
-        <!--            <t t-if="not company">-->
-        <!--                &lt;!&ndash; Multicompany &ndash;&gt;-->
-        <!--                <t t-if="company_id">-->
-        <!--                    <t t-set="company" t-value="company_id"/>-->
-        <!--                </t>-->
-        <!--                <t t-elif="o and 'company_id' in o and o.company_id.sudo()">-->
-        <!--                    <t t-set="company" t-value="o.company_id.sudo()"/>-->
-        <!--                </t>-->
-        <!--                <t t-else="else">-->
-        <!--                    <t t-set="company" t-value="res_company"/>-->
-        <!--                </t>-->
-        <!--            </t>-->
-        <!--            <t t-if="company.external_report_layout_id" t-call="{{company.external_report_layout_id.sudo().key}}">-->
-        <!--                <t t-out="0"/>-->
-        <!--            </t>-->
-        <!--            <t t-else="else" t-call="invoice_report_enhancement.custom_external_layout_standard">-->
-        <!--                <t t-out="0"/>-->
-        <!--            </t>-->
-        <!--        </template>-->
-
-        <record id="paperformat_report_invoice" model="report.paperformat">
-            <field name="name">pet barn invoice paperformat</field>
-            <field name="default" eval="True"/>
-            <field name="format">custom</field>
-            <field name="page_height">280</field>
-            <field name="page_width">220</field>
-            <field name="orientation">Portrait</field>
-            <field name="margin_top">80</field>
-            <field name="margin_bottom">10</field>
-            <field name="margin_left">1</field>
-            <field name="margin_right">1</field>
-            <field name="header_line" eval="False"/>
-            <field name="header_spacing">50</field>
-            <field name="dpi">90</field>
-            <field name="report_ids"
-                   eval="[(6,0,[ref('invoice_report_enhancement.report_invoice_pet_barn')])]"/>
-        </record>
-
         <template id="report_invoice_pet_barn_document">
             <!--            <t t-call="invoice_report_enhancement.custom_external_layout">-->
             <t t-call="web.basic_layout">
@@ -332,6 +244,24 @@
                 </t>
             </t>
         </template>
+
+        <record id="paperformat_report_invoice" model="report.paperformat">
+            <field name="name">pet barn invoice paperformat</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">280</field>
+            <field name="page_width">220</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">80</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">1</field>
+            <field name="margin_right">1</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">50</field>
+            <field name="dpi">90</field>
+            <field name="report_ids"
+                   eval="[(6,0,[ref('invoice_report_enhancement.report_invoice_pet_barn')])]"/>
+        </record>
 
         <!-- QWeb Reports -->
         <record id="account.account_invoices" model="ir.actions.report">
