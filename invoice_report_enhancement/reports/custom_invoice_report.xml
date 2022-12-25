@@ -115,10 +115,12 @@
                                             <span t-field="line.product_id.name" t-options="{'widget': 'text'}"/>
                                         </td>
                                         <td class="text-center">
-                                            <!--                                            <span t-field="line.expiration_date"/>-->
-                                            <span t-esc="datetime.datetime.strptime(line.expiration_date, '%Y-%m-%d').strftime('%m')"/>
-                                            /
-                                            <span t-esc="datetime.datetime.strptime(line.expiration_date, '%Y-%m-%d').strftime('%Y')"/>
+                                            <t t-if="line.expiration_date">
+                                                <!--                                            <span t-field="line.expiration_date"/>-->
+                                                <span t-esc="datetime.datetime.strptime(line.expiration_date, '%Y-%m-%d').strftime('%m')"/>
+                                                /
+                                                <span t-esc="datetime.datetime.strptime(line.expiration_date, '%Y-%m-%d').strftime('%Y')"/>
+                                            </t>
                                         </td>
                                         <td class="text-center">
                                             <span t-field="line.quantity"/>
