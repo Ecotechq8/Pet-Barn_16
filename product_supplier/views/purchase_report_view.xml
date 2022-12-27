@@ -1,0 +1,20 @@
+<odoo>
+    <data>
+        <record id="purchase_report_view_search" model="ir.ui.view">
+            <field name="name">purchase.report.search.stock</field>
+            <field name="model">purchase.report</field>
+            <field name="inherit_id" ref="purchase.view_purchase_order_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="product_supplier"/>
+                </xpath>
+                <xpath expr="//filter[@name='quotes']" position="after">
+                    <filter name="product_supplier" string="Product Supplier" domain="[('product_supplier', '!=', False)]"/>
+                </xpath>
+                <xpath expr="//filter[@name='group_date_approve_month']" position="after">
+                    <filter string="Product Supplier" name="product_supplier" context="{'group_by': 'product_supplier'}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

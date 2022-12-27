@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <template id="report_invoice_pet_barn_document">
-            <!--            <t t-call="invoice_report_enhancement.custom_external_layout">-->
+        <template id="report_sales_pet_barn_document">
             <t t-call="web.basic_layout">
                 <t t-set="o" t-value="o.with_context(lang=lang)"/>
                 <div class="page" dir="ltr">
                     <h2 style="margin-top:50px;">
                         <center>
                             <strong>
-                                <span>فــــــــاتورة بالحساب</span>
-                                <br/>
-                                <span>Credit Invoice On Account</span>
+                                <t t-if="o.state == 'sale'">
+                                    <span>أمــر بـيــع</span>
+                                    <br/>
+                                    <span>Sale Order</span>
+                                </t>
+                                <t t-else="">
+                                    <span>عـرض سـعـر</span>
+                                    <br/>
+                                    <span>Sale Quotation</span>
+                                </t>
                             </strong>
                         </center>
                     </h2>
@@ -21,7 +27,7 @@
                             <t>
                                 <strong>الـتـاريــخ:
                                     &#160;&#160;&#160;&#160;
-                                    <span t-field="o.invoice_date"/>
+                                    <span t-field="o.date_order"/>
                                 </strong>
                             </t>
                             <br/>
@@ -34,7 +40,7 @@
                             <t>
                                 <strong>المـلاحـظــات:</strong>
                                 &#160;&#160;&#160;&#160;
-                                <span t-field="o.narration"/>
+                                <span t-field="o.note"/>
                             </t>
                             <br/>
                             <t>
@@ -44,10 +50,13 @@
                             </t>
                         </div>
                         <div class="col-auto col-3 mw-100 mb-2">
-                            <strong>رقـم الفـاتـورة</strong>
+                            <strong>رقـم أمـر البـيـع</strong>
                             <p class="m-0" t-field="o.name"/>
                         </div>
                     </div>
+
+                    <t t-set="lines_to_report" t-value="o._get_order_lines_to_report()"/>
+                    <t t-set="display_discount" t-value="any(l.discount for l in lines_to_report)"/>
 
                     <table class="table table-sm o_main_table" name="account_invoice_line" style="margin-top:30px;">
                         <thead>
@@ -96,17 +105,17 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="account_invoice_tbody text-center">
+                        <tbody class="sales_tbody text-center">
                             <t t-set="current_subtotal" t-value="0"/>
-                            <t t-set="lines"
-                               t-value="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)"/>
-
-                            <t t-foreach="lines" t-as="line">
+                            <t t-set="expiration_date" t-value="[]"/>
+                            <t t-foreach="lines_to_report" t-as="line">
                                 <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"
                                    groups="account.group_show_line_subtotals_tax_excluded"/>
+                                <t t-set="current_subtotal" t-value="current_subtotal + line.price_total"
+                                   groups="account.group_show_line_subtotals_tax_included"/>
 
                                 <tr t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
-                                    <t t-if="line.display_type == 'product'">
+                                    <t t-if="not line.display_type">
                                         <td class="text-center">
                                             <span t-field="line.product_id.default_code"
                                                   t-options="{'widget': 'text'}"/>
@@ -115,16 +124,23 @@
                                             <span t-field="line.product_id.name" t-options="{'widget': 'text'}"/>
                                         </td>
                                         <td class="text-center">
-                                            <t t-if="line.expiration_date">
-                                                <!--                                            <span t-field="line.expiration_date"/>-->
-                                                <span t-esc="datetime.datetime.strptime(line.expiration_date, '%Y-%m-%d').strftime('%m')"/>
-                                                /
-                                                <span t-esc="datetime.datetime.strptime(line.expiration_date, '%Y-%m-%d').strftime('%Y')"/>
+                                            <t t-if="line.lot_serial_number_ids">
+                                                <t t-foreach="line.lot_serial_number_ids" t-as="serial">
+                                                    <t t-if="serial.expiration_date not in expiration_date">
+                                                        <!--                                                        <span t-esc="serial.expiration_date"/>-->
+                                                        <span t-esc="datetime.datetime.strptime(str(serial.expiration_date), '%Y-%m-%d %H:%M:%S').strftime('%m')"/>
+                                                        /
+                                                        <span t-esc="datetime.datetime.strptime(str(serial.expiration_date), '%Y-%m-%d %H:%M:%S').strftime('%Y')"/>
+                                                        <br/>
+                                                        <t t-set="expiration_date"
+                                                           t-value="expiration_date + [serial.expiration_date]"/>
+                                                    </t>
+                                                </t>
                                             </t>
                                         </td>
                                         <td class="text-center">
-                                            <span t-field="line.quantity"/>
-                                            <span t-field="line.product_uom_id" groups="uom.group_uom"/>
+                                            <span t-field="line.product_uom_qty"/>
+                                            <span t-field="line.product_uom" groups="uom.group_uom"/>
                                         </td>
                                         <td class="text-center">
                                             <span class="text-nowrap" t-field="line.price_unit"
@@ -144,19 +160,20 @@
                                                   groups="account.group_show_line_subtotals_tax_excluded"/>
                                         </td>
                                     </t>
-                                    <t t-if="line.display_type == 'line_section'">
-                                        <td colspan="99">
-                                            <span t-field="line.name" t-options="{'widget': 'text'}"/>
+                                    <t t-elif="line.display_type == 'line_section'">
+                                        <td name="td_section_line" colspan="99">
+                                            <span t-field="line.name"/>
                                         </td>
                                         <t t-set="current_section" t-value="line"/>
                                         <t t-set="current_subtotal" t-value="0"/>
                                     </t>
-                                    <t t-if="line.display_type == 'line_note'">
-                                        <td colspan="99">
-                                            <span t-field="line.name" t-options="{'widget': 'text'}"/>
+                                    <t t-elif="line.display_type == 'line_note'">
+                                        <td name="td_note_line" colspan="99">
+                                            <span t-field="line.name"/>
                                         </td>
                                     </t>
                                 </tr>
+
 
                                 <t t-if="current_section and (line_last or lines[line_index+1].display_type == 'line_section')">
                                     <tr class="is-subtotal text-end">
@@ -237,18 +254,18 @@
             </t>
         </template>
 
-        <template id="report_invoice_pet_barn">
+        <template id="report_sales_pet_barn">
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="o">
                     <span t-field="o.partner_id.lang"/>
                     <t t-set="lang" t-value="o.partner_id.lang"/>
-                    <t t-call="invoice_report_enhancement.report_invoice_pet_barn_document" t-lang="lang"/>
+                    <t t-call="sales_report_enhancement.report_sales_pet_barn_document" t-lang="lang"/>
                 </t>
             </t>
         </template>
 
-        <record id="paperformat_report_invoice" model="report.paperformat">
-            <field name="name">pet barn invoice paperformat</field>
+        <record id="paperformat_report_sales" model="report.paperformat">
+            <field name="name">pet barn sales paperformat</field>
             <field name="default" eval="True"/>
             <field name="format">custom</field>
             <field name="page_height">280</field>
@@ -262,23 +279,19 @@
             <field name="header_spacing">50</field>
             <field name="dpi">90</field>
             <field name="report_ids"
-                   eval="[(6,0,[ref('invoice_report_enhancement.report_invoice_pet_barn')])]"/>
+                   eval="[(6,0,[ref('sales_report_enhancement.report_sales_pet_barn')])]"/>
         </record>
 
         <!-- QWeb Reports -->
-        <record id="account.account_invoices" model="ir.actions.report">
-            <field name="name">Pet Barn Invoices</field>
-            <field name="model">account.move</field>
+        <record id="sale.action_report_saleorder" model="ir.actions.report">
+            <field name="name">Pet Barn Quotation / Order</field>
+            <field name="model">sale.order</field>
             <field name="report_type">qweb-pdf</field>
-            <field name="report_name">invoice_report_enhancement.report_invoice_pet_barn</field>
-            <field name="report_file">invoice_report_enhancement.report_invoice_pet_barn</field>
-            <field name="print_report_name">(object._get_report_base_filename())</field>
-            <field name="attachment">(object.state == 'posted') and ((object.name or 'INV').replace('/','_')+'.pdf')
-            </field>
-            <field name="binding_model_id" ref="account.model_account_move"/>
+            <field name="report_name">sales_report_enhancement.report_sales_pet_barn</field>
+            <field name="report_file">sales_report_enhancement.report_sales_pet_barn</field>
+            <field name="print_report_name">(object.state in ('draft', 'sent') and 'Quotation - %s' % (object.name)) or 'Order - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
             <field name="binding_type">report</field>
-            <field name="groups_id"
-                   eval="[(4, ref('account.group_account_invoice')),(4, ref('account.group_account_readonly'))]"/>
         </record>
 
     </data>

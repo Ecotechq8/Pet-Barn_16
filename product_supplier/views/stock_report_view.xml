@@ -1,0 +1,20 @@
+<odoo>
+    <data>
+        <record id="purchase_report_view_search" model="ir.ui.view">
+            <field name="name">stock.report.search.stock</field>
+            <field name="model">stock.report</field>
+            <field name="inherit_id" ref="stock_enterprise.stock_report_search_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='reference']" position="after">
+                    <field name="product_supplier" string="Product Supplier"/>
+                </xpath>
+                <xpath expr="//filter[@name='done_receipts']" position="after">
+                    <filter name="product_supplier" string="Product Supplier"
+                            domain="[('product_supplier', '!=', False)]"/>
+                    <filter string="Product Supplier" name="product_supplier"
+                            context="{'group_by': 'product_supplier'}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
