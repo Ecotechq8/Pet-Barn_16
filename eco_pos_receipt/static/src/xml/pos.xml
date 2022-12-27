@@ -7,16 +7,16 @@
                     <div t-if="receipt.company.logo">
                         <img class="pos-receipt-logo" t-att-src="receipt.company.logo" alt="Logo"/>
                     </div>
-                    <div t-if="!receipt.company.logo">
-                        <h2 class="pos-receipt-center-align">
-                            <t t-esc="env.pos.config.name"/>
-                        </h2>
-                    </div>
+<!--                    <div t-if="!receipt.company.logo">-->
+<!--                        <h2 class="pos-receipt-center-align">-->
+<!--                            <t t-esc="env.pos.config.name"/>-->
+<!--                        </h2>-->
+<!--                    </div>-->
 <!--                    <h4 class="pos-receipt-center-align" style="border-bottom: 1px dashed black;">-->
 <!--                    <t t-esc="receipt.company.name"/>-->
 <!--                    </h4>-->
                     <div class="pos-receipt-center-align" style="font-size:13px;border-bottom: 1px dashed black;">
-                        <t t-esc='receipt.company.name'/>
+                        <t t-esc="env.pos.config.name"/>
                         <br/>
                         <strong>Invoice No. :</strong>
                         <t t-esc='receipt.name'/>
@@ -24,8 +24,8 @@
                         <strong>Date :</strong>
                         <t t-esc='receipt.date.localestring'/>
                         <br/>
-                        <strong>Served by :</strong>
-                       <t t-esc="receipt.cashier" /></div>
+                        <strong>Served By :</strong>
+                        <t t-esc='receipt.cashier'/>
                         <br/>
                         <t t-if="receipt.header_html">
                         <t t-raw="receipt.header_html"/>
@@ -218,3 +218,4 @@
         </xpath>
     </t>
 </templates>
+
