@@ -11,7 +11,7 @@
                 <span t-if="line.product_id and line.product_id.barcode">
                     <div t-field="line.product_id.barcode"
                          t-options="{'widget': 'barcode', 'symbology': 'auto', 'width': 400, 'height': 100, 'quiet': 0, 'img_style': 'height:35px;'}"/>
-
+                    <span style="text-center" t-field="line.product_id.barcode"/>
                 </span>
             </td>
         </xpath>
@@ -27,7 +27,7 @@
                 <span t-if="order_line.product_id and order_line.product_id.barcode">
                     <div t-field="order_line.product_id.barcode"
                          t-options="{'widget': 'barcode', 'symbology': 'auto', 'width': 400, 'height': 100, 'quiet': 0, 'img_style': 'height:35px;'}"/>
-
+                    <span style="text-center" t-field="line.product_id.barcode"/>
                 </span>
             </td>
         </xpath>
