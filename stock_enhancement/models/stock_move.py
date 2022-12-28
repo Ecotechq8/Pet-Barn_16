@@ -5,6 +5,28 @@ from datetime import datetime
 class StockMove(models.Model):
     _inherit = 'stock.move'
 
+    related_partner = fields.Many2one(comodel_name='res.partner', compute='get_related_partner', string='Partner')
+    related_invoice = fields.Many2one(comodel_name='account.move', compute='get_related_invoice', string='Invoice',
+                                      store=True)
+
+    def get_related_partner(self):
+        for rec in self:
+            rec.related_partner = False
+            if rec.picking_id:
+                rec.related_partner = rec.picking_id.partner_id.id
+
+    def get_related_invoice(self):
+        for item in self:
+            item.related_invoice = False
+            if item.picking_id:
+                item.related_invoice = item.picking_id.invoice_id_seq
+                if not item.picking_id.invoice_id_seq:
+                    bill = self.env['account.move'].search([('move_type', 'in', ('in_invoice', 'in_refund')),
+                                                            ('invoice_origin', '=', item.origin),
+                                                            ('state', '!=', 'cancel')], limit=1)
+                    if bill:
+                        item.related_invoice = bill.id
+
     quantity_balance = fields.Float(compute='get_quantity_balance', default=0.0, digits='Product Price',
                                     copy=False)
     product_cost = fields.Monetary(compute='get_quantity_balance', copy=False, string='Unit Cost')
@@ -28,7 +50,7 @@ class StockMove(models.Model):
     def get_quantity_balance(self):
         balance_qty = 0.0
         for item in self:
-            item.quantity_balance, item.sale_price = 0.0, 0.0
+            item.quantity_balance, item.sale_price, item.product_cost, item.product_total_cost = 0.0, 0.0, 0.0, 0.0
             products = self.env['stock.move'].search([('state', '=', 'done')], order='date asc').mapped('product_id')
             for pro in products:
                 if item.product_id == pro:

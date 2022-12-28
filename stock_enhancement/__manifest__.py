@@ -9,7 +9,7 @@
     'sequence': 1,
     'author': 'Eco Tech (Omnya Rashwan)',
     'depends': [
-        'stock'
+        'stock', 'sale'
     ],
     'data': [
         'views/stock_move_inh_view.xml',
