@@ -94,5 +94,16 @@
                   action="product_brand_action"
                   parent="stock.menu_stock_inventory_control"
                   sequence="2"/>
+
+        <record id="stock_quant_search_brand_add" model="ir.ui.view">
+            <field name="name">stock.quant.search.brand</field>
+            <field name="model">stock.quant</field>
+            <field name="inherit_id" ref="stock.quant_search_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='company']" position="after">
+                    <filter string="Brand" name="Brand" context="{'group_by':'brand_id'}"/>
+                </xpath>
+            </field>
+        </record>
     </data>
 </odoo>

@@ -1,0 +1,36 @@
+<odoo>
+    <data>
+        <record id="view_stock_move_inherited_tree" model="ir.ui.view">
+            <field name="name">stock.move.inherited.tree</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_uom']" position="after">
+                    <field name="related_partner"/>
+                    <field name="related_invoice"/>
+                </xpath>
+                <xpath expr="//field[@name='product_uom_qty']" position="after">
+                    <field name="quantity_balance" string="Qty Balance" sum="Total" optional="hide"/>
+                </xpath>
+                <xpath expr="//field[@name='company_id']" position="before">
+                    <field name="currency_id" optional="hide"/>
+                    <field name="sale_price" optional="hide"/>
+                    <field name="product_cost" optional="hide"/>
+                    <field name="product_total_cost" optional="hide"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_stock_move_inherited_search" model="ir.ui.view">
+            <field name="name">stock.move.inherited.search</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="related_invoice" string="Invoice"
+                           filter_domain="[('related_invoice', 'ilike', self)]"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

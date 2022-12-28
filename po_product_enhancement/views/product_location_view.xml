@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="product_location_tree_view" model="ir.ui.view">
+            <field name="name">product.location.tree.view</field>
+            <field name="model">product.location</field>
+            <field name="arch" type="xml">
+                <tree string="Product Location">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="product_location_form_View" model="ir.ui.view">
+            <field name="name">product.location.form.view</field>
+            <field name="model">product.location</field>
+            <field name="arch" type="xml">
+                <form string="Product Location">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="product_location_action" model="ir.actions.act_window">
+            <field name="name">Product Location</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.location</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- This Menu Item must have a parent and an action -->
+        <menuitem id="product_location_action_mnu" name="Product Location" parent="stock.menu_stock_config_settings"
+                  action="product_location_action" sequence="4"
+                  groups="po_product_enhancement.group_product_location"/>
+
+    </data>
+</odoo>

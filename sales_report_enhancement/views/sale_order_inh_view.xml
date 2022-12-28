@@ -9,6 +9,10 @@
                     <field name="lot_serial_number_ids" widget="many2many_tags"/>
                     <field name="related_location_id" invisible="1"/>
                 </xpath>
+                <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="before">
+                    <field name="product_barcode" widget="barcode"
+                           t-options="{'widget': 'barcode', 'symbology': 'auto', 'width': 400, 'height': 100, 'quiet': 0, 'img_style': 'height:35px;'}"/>
+                </xpath>
             </field>
         </record>
     </data>

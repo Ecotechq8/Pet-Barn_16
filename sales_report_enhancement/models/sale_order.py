@@ -16,6 +16,7 @@ class SaleOrderLine(models.Model):
 
     lot_serial_number_ids = fields.Many2many(comodel_name='stock.lot')
     related_location_id = fields.Many2one(related='order_id.warehouse_id.lot_stock_id')
+    product_barcode = fields.Char(related='product_id.barcode')
 
     @api.onchange('product_id')
     def onchange_product_id(self):
