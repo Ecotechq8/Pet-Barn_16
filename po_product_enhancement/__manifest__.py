@@ -6,8 +6,8 @@
     "author": "Eco-Tech (Omnya Rashwan)",
     "depends": ["base", "stock", "purchase"],
     "data": [
-        "security/ir.model.access.csv",
         "security/security_groups.xml",
+        "security/ir.model.access.csv",
         "views/product_location_view.xml",
         "views/product_view.xml",
         "views/purchase_order_inh_view.xml",
