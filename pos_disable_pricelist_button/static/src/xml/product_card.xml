@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+		
+
+    <t t-name="ProductItem" t-inherit="point_of_sale.ProductItem" t-inherit-mode="extension" owl="1">
+			<xpath expr="//div[hasclass('product-img')]" position="replace">
+				<div class="product-img" t-att-title="props.product.display_name" >
+					<img t-att-src="imageUrl" t-att-alt="props.product.display_name" />
+				</div>
+			</xpath>
+			<xpath expr="//div[hasclass('product-content')]" position="replace">
+				 <div class="product-content">
+                <div class="product-name" t-att-title="props.product.display_name" t-attf-id="article_product_{{props.product.id}}">
+                    <t t-esc="props.product.display_name" />
+                </div>
+                <span class="price-tag">
+                    <t t-esc="price" />
+                </span>
+            </div>
+			</xpath>
+
+
+	</t>
+		
+	</templates>
+	
+	

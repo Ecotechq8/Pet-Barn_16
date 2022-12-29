@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_stock_picking_form_extend">
+            <field name="name">stock.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_assign']" position="after">
+                    <button name="button_method_name" type="object" string="Owner Approve"/>
+                </xpath>
+
+                <xpath expr="//button[@name='button_validate']" position="attributes">
+                    <attribute name="required">1</attribute>
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>
