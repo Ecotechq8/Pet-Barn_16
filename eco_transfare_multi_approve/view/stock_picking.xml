@@ -8,13 +8,15 @@
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//button[@name='action_assign']" position="after">
-                    <button name="button_method_name" type="object" string="Owner Approve"/>
+                    <field name="multi_approve" invisible="1" />
+                    <field name="active_multi_approve" invisible="1" />
+                    <button name="internal_transfare_approval" type="object" attrs="{'invisible': ['|',('multi_approve','=',True),('active_multi_approve','=',False)]}"  string="Owner Approve"/>
                 </xpath>
 
-                <xpath expr="//button[@name='button_validate']" position="attributes">
-                    <attribute name="required">1</attribute>
-                    <attribute name="readonly">1</attribute>
-                </xpath>
+<!--                <xpath expr="//button[@name='button_validate']" position="attributes">-->
+<!--                    <attribute name="required">1</attribute>-->
+<!--                    <attribute name="readonly">1</attribute>-->
+<!--                </xpath>-->
             </field>
         </record>
 

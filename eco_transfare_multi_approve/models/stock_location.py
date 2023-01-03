@@ -8,16 +8,20 @@ class StockLocation(models.Model):
     _inherit = "stock.location"
 
 
-    owner_id_domain = fields.Char(string="",compute="domain_for_user_access", required=False, )
-    owner_id = fields.Many2one(comodel_name="res.users", string="Owner ?",domain="owner_id_domain" ,readonly=False, )
+    owner_access = fields.Boolean(string="Access Setting", required=False, )
+    owner_id = fields.Many2one(comodel_name="res.users", string="Owner ?" ,readonly=False, )
     #
-    # @api.onchange('name')
-    # @api.constrains('name')
+    @api.onchange('owner_access')
+    @api.constrains('owner_access')
     def domain_for_user_access(self):
         for location in self :
             inventory_access_groups = self.env['res.groups'].search([('category_id', '=', 7)])
-            location.owner_id_domain=json.dumps([('groups_id', 'in', inventory_access_groups.mapped('id'))])
-            print(location.owner_id_domain)
+            # location.owner_id_domain=json.dumps([('groups_id', 'in', inventory_access_groups.mapped('id'))])
+            # print(location.owner_id_domain)
+            users = self.env['res.users'].search([('groups_id', 'in', inventory_access_groups.mapped('id'))])
+            print(users)
+            domain = {'owner_id': [('groups_id', 'in', inventory_access_groups.mapped('id'))]}
+            return {'domain': domain}
 
 
         # self.owner_id=1

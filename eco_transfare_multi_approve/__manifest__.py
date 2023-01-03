@@ -15,6 +15,7 @@ Multi Approve Picking as per user Selected on Operation Type
     'data': [
         'view/stock_location.xml',
         'view/stock_picking_type.xml',
+        'view/stock_picking.xml',
     ],
 
     'installable': True,
