@@ -11,8 +11,8 @@ class StockPicking(models.Model):
     def internal_transfare_approval(self):
         for transfare in self:
             if transfare.picking_type_id.active_multi_approve==True:
-                if self.picking_type_id.default_location_src_id.owner_id:
-                    if self.picking_type_id.default_location_src_id.owner_id.id != self.env.user.id:
+                if self.location_id.owner_id:
+                    if self.location_id.owner_id.id != self.env.user.id:
                         raise ValidationError(("Cannot Approve the Transfare , please contact with Location Owner"))
                     else:
                         transfare.multi_approve = True
@@ -21,8 +21,8 @@ class StockPicking(models.Model):
 
     def button_validate(self,):
         if self.picking_type_id.active_multi_approve==True:
-            if self.picking_type_id.default_location_src_id.owner_id:
-                if self.picking_type_id.default_location_src_id.owner_id.id!=self.env.user.id:
+            if self.location_dest_id.owner_id:
+                if self.location_dest_id.owner_id.id!=self.env.user.id:
                     raise ValidationError(("Cannot Validate the Transfare , please contact with Location Owner"))
                 else:
                     if self.multi_approve == False:

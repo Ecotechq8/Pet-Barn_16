@@ -6,8 +6,12 @@
                 <link rel="stylesheet" type="text/css" href="/partner_customization/static/src/scss/choices.css"/>
 
             <div class="partner-detail">
+                mobiscroll.select('#multiple-select', {
+                    inputElement: document.getElementById('my-input'),
+                    touchUi: false
+                });
                 <span class="label">Tags</span>
-                <select class="custom-select" name="category_id" multiple="multiple"
+                <select class="chosen-select" name="category_id" multiple="multiple"
                         t-on-change="captureChange">
                     <option value="">None</option>
                     <t t-foreach="env.pos.PartnerCategory" t-as="category" t-key="category.id">
@@ -17,22 +21,6 @@
                         </option>
                     </t>
                 </select>
-<!--                <span class="label">Pets Name</span>-->
-<!--                <select class="tag_detail" name="pets_names_id" multiple="multiple"-->
-<!--                        t-on-change="captureChange">-->
-<!--                    <option value="">None</option>-->
-<!--                    <t t-foreach="env.pos.PetsNames" t-as="pets" t-key="pets.id">-->
-<!--                        <option t-att-value="pets.id"-->
-<!--                                t-att-selected="props.partner.pets_names_id ? ((country.id === props.partner.pets_names_id[0]) ? true : undefined) : undefined">-->
-<!--                            <t t-esc="pets.name" />-->
-<!--                        </option>-->
-<!--                    </t>-->
-<!--                </select>-->
-<!--                <label for="start">Start date:</label>-->
-<!--                <input type="date" id="start" name="trip-start"-->
-<!--                       value="birthday_date">-->
-<!--                </input>-->
-
             </div>
 		</xpath>
 	</t>
