@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="PartnerDetailsEdit" t-inherit="point_of_sale.PartnerDetailsEdit" t-inherit-mode="extension" owl="1">
+		<xpath expr="//div[hasclass('partner-details-left')]" position="inside">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css"/>
+            <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+
+            <strong><span style="padding-left: 25px;" class="label">Tags</span></strong>
+            <div class="partner-detail" style="width:330px;padding-left: 80px;">
+
+
+                <select id="inputGroupSelect04" class="chosen-select" name="category_id" multiple="multiple"
+                        t-on-change="captureChange">
+<!--                    <option value="">None</option>-->
+                    <t t-foreach="env.pos.PartnerCategory" t-as="category" t-key="category.id">
+                        <option t-att-value="category.id"
+                                t-att-selected="props.partner.category_id">
+                            <t t-esc="category.name"/>
+                        </option>
+                    </t>
+                </select>
+            </div>
+
+            <strong><span  class="label">Pet Name</span></strong>
+            <div class="partner-detail" style="width:330px;padding-left: 80px;">
+
+
+                <select id="pet_names_id" class="chosen-select" name="pets_names_id" multiple="multiple"
+                        t-on-change="captureChange">
+<!--                    <option value="">None</option>-->
+                    <t t-foreach="env.pos.PetsNames" t-as="petname" t-key="petname.id">
+                        <option t-att-value="petname.id"
+                                t-att-selected="props.partner.pets_names_id">
+                            <t t-esc="petname.name"/>
+                        </option>
+                    </t>
+                </select>
+            </div>
+            <br/>
+           <strong><span>Birthdate</span></strong> 
+            <input id="birthday_date" name="birthday_date"
+                type="date"
+                   t-on-change="captureChange"
+                t-att-value="props.partner.birthday_date || ''"
+               />
+		</xpath>
+	</t>
+</templates>
+	
+	
